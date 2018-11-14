@@ -1,0 +1,4 @@
+[2018-11-14 15:26:47] INFO [<module>: main.py, 140] 当前获取到的城市列表: ['Hong Kong', 'Munich', 'Stockholm', 'London', 'Padova', 'Zurich', 'Groningen', 'Dallas', 'Athens', 'Montreal']
+[2018-11-14 15:26:48] WARNING [<module>: main.py, 146] 监测网站可用次数为0
+[2018-11-14 15:27:38] INFO [<module>: main.py, 140] 当前获取到的城市列表: ['Hong Kong', 'Munich', 'Stockholm', 'London', 'Padova', 'Zurich', 'Groningen', 'Dallas', 'Athens', 'Montreal']
+[2018-11-14 15:27:39] WARNING [<module>: main.py, 146] 监测网站可用次数为9

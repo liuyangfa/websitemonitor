@@ -1,15 +1,24 @@
 # -*- coding:utf-8-*-
 
-import sys
-import xlsxwriter
-from collect.collector import *
+import logging
+import logging.config
 from datetime import datetime
+
+import xlsxwriter
+
+from collect.collector import *
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
+log_filename = "collect.log"
+logging.basicConfig(level=logging.INFO,
+                    format='[%(asctime)s] %(levelname)s [%(funcName)s: %(filename)s, %(lineno)d] %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S',
+                    filemode='a',
+                    filename=log_filename)
+
 codes = ("hk", "d2", "se", "uk", "it", "ch", "n4", "r1", "gr", "mt")
-# # sites = ("www.ont.io", "www.ethereum.org", "www.platon.network", "sg.platon.network")
 # sites = {
 #     "www.platon.network": "Platon(京东)",
 #     "sg.platon.network": "Platon(东南亚)",
@@ -51,7 +60,8 @@ dates = datetime.today().strftime("%Y%m%d%H%M%S")
 
 
 def main():
-    workbook = xlsxwriter.Workbook(u"PlatON网站服务优化监测表-汇总-%s.xlsx" % (dates))
+    filename = u"PlatON网站服务优化监测表-汇总-%s.xlsx" % (dates)
+    workbook = xlsxwriter.Workbook(filename=filename)
     titleStyle = workbook.add_format()
     colTitleStyle = workbook.add_format()
 
@@ -105,6 +115,7 @@ def main():
         worksheet.write_string(1, 5, "下载时间(ms)", colTitleStyle)
         worksheet.write_string(1, 6, "访问状态(ms)", colTitleStyle)
         for code in codes:
+            logging.info("开始获取%s信息" % (sites.get(site)))
             country, city, rtime, ctime, dtime = get_data(
                 "https://api.asm.ca.com/1.6/cp_check?checkloc=%s&type=https&host=%s&path=&port=443&callback=update_" % (
                     code, site), code)
@@ -118,9 +129,18 @@ def main():
                                     '=IF(C%s>3,"超时",IF(C%s=0,"超时",IF(C%s>3,"超时","OK")))' % (row + 1, row + 1, row + 1),
                                     dataStyle)
             row += 1
+            logging.info("%s信息处理结束" % (sites.get(site)))
 
     workbook.close()
+    logging.info("%s写入数据完成" % (filename))
 
 
 if __name__ == '__main__':
-    main()
+    citys = getCity()
+    logging.info("当前获取到的城市列表: %s" % (citys))
+    result = int(checkAvailable())
+    if int(result) / 10 > 4:
+        logging.info("监测网站可用次数为%d" % (result))
+        main()
+    else:
+        logging.warn("监测网站可用次数为%d" % (result))

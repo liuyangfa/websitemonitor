@@ -13,7 +13,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 
-def get_data(url, code):
+def getdata(url, code):
     resp = requests.get("%s%s" % (url, code))
     if resp.status_code != 200:
         return "ERROR"
@@ -34,7 +34,7 @@ def get_data(url, code):
     return (country, city, rtime, ctime, dtime)
 
 
-def checkAvailable():
+def checkavailable():
     url = "https://api.asm.ca.com/1.6/acct_credits?&callback=check_avail_credits"
     response = requests.get(url)
     if response.status_code != 200:
@@ -52,7 +52,7 @@ def checkAvailable():
         return 0
 
 
-def getCity():
+def getcity():
     citys = []
     url = "https://asm.ca.com/en/checkit.php"
     response = requests.get(url)

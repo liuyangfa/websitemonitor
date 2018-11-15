@@ -5,7 +5,7 @@ import sys
 from datetime import datetime
 
 import xlsxwriter
-
+from xlsxwriter.utility import xl_col_to_name
 from collect.collector import getdata, checkavailable
 
 reload(sys)
@@ -160,6 +160,7 @@ def works():
     dataStyle.set_border(1)
 
     workchart = workbook.add_worksheet("网站访问监测图表")
+    currentcol = 1
     for site in sites.keys():
         # 数据写入行号及列数
         row = 2
@@ -193,10 +194,12 @@ def works():
                                     '=IF(C%s>3,"超时",IF(C%s=0,"超时",IF(C%s>3,"超时","OK")))' % (row + 1, row + 1, row + 1),
                                     dataStyle)
             row += 1
-        workcharts(workbook, workchart, worksheet.name, "访问总时间(s)", "C", "B2")
-        workcharts(workbook, workchart, worksheet.name, "解析时间(ms)", "D", "B20")
-        workcharts(workbook, workchart, worksheet.name, "连接时间(ms)", "E", "B38")
-        workcharts(workbook, workchart, worksheet.name, "下载时间(ms)", "F", "B56")
+        column = xl_col_to_name(currentcol)
+        workcharts(workbook, workchart, worksheet.name, "访问总时间(s)", "C", "%s2" % column)
+        workcharts(workbook, workchart, worksheet.name, "解析时间(ms)", "D", "%s20" % column)
+        workcharts(workbook, workchart, worksheet.name, "连接时间(ms)", "E", "%s38" % column)
+        workcharts(workbook, workchart, worksheet.name, "下载时间(ms)", "F", "%s56" % column)
+        currentcol += 10
     createextratable(workbook, titlestyle, coltitlestyle)
 
     workbook.close()

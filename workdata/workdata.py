@@ -1,53 +1,20 @@
 # -*- coding:utf-8-*-
-
 import logging
 import sys
 from datetime import datetime
 
 import xlsxwriter
 from xlsxwriter.utility import xl_col_to_name
-from collect.collector import getdata, checkavailable
+from config import *
+from collect.collector import getdatas
 
 reload(sys)
-sys.setdefaultencoding('utf-8')
+sys.setdefaultencoding("utf-8")
 
-codes = ("hk", "d2", "se", "uk", "it", "ch", "n4", "r1", "gr", "mt")
-# sites = {
-#     "www.platon.network": "Platon(京东)",
-#     "sg.platon.network": "Platon(东南亚)",
-#     "www.ont.io": "ONT本体(东南亚)",
-#     "www.ethereum.org": "Ethereum以太坊",
-# }
+# codes = ("hk", "d2", "se", "uk", "it", "ch", "n4", "r1", "gr", "mt")
 
-sites = {
-    "www.platon.network": "Platon(京东)"
-}
 
-countryCode = {
-    "cn": "中国",
-    "de": "德国",
-    "se": "瑞典",
-    "gb": "英国",
-    "it": "意大利",
-    "ch": "瑞士",
-    "nl": "荷兰",
-    "us": "美国",
-    "gr": "希腊",
-    "ca": "加拿大"
-}
 
-cityCode = {
-    "Hong Kong": "香港",
-    "München": "慕尼黑",
-    "Stockholm": "斯德哥尔摩",
-    "London": "伦敦",
-    "Padova": "帕多瓦",
-    "Zurich": "苏黎世",
-    "Groningen": "格罗宁根",
-    "Dallas": "达拉斯",
-    "Athens": "雅典",
-    "Montreal": "蒙特利尔",
-}
 
 
 def createextratable(workbook, titlstyle, coltitlestyle):
@@ -181,8 +148,8 @@ def works():
         worksheet.write_string(1, 4, "连接时间(ms)", coltitlestyle)
         worksheet.write_string(1, 5, "下载时间(ms)", coltitlestyle)
         worksheet.write_string(1, 6, "访问状态(ms)", coltitlestyle)
-        for code in codes:
-            country, city, rtime, ctime, dtime = getdata(
+        for code in codes.keys():
+            country, city, rtime, ctime, dtime = getdatas(
                 "https://api.asm.ca.com/1.6/cp_check?checkloc=%s&type=https&host=%s&path=&port=443&callback=update_" % (
                     code, site), code)
             worksheet.write_string(row, 1, "%s-%s" % (countryCode.get(country), cityCode.get(city)), areaStyle)
@@ -196,16 +163,11 @@ def works():
             row += 1
         column = xl_col_to_name(currentcol)
         workcharts(workbook, workchart, worksheet.name, "访问总时间(s)", "C", "%s2" % column)
-        workcharts(workbook, workchart, worksheet.name, "解析时间(ms)", "D", "%s20" % column)
-        workcharts(workbook, workchart, worksheet.name, "连接时间(ms)", "E", "%s38" % column)
-        workcharts(workbook, workchart, worksheet.name, "下载时间(ms)", "F", "%s56" % column)
-        currentcol += 10
+        workcharts(workbook, workchart, worksheet.name, "解析时间(ms)", "D", "%s19" % column)
+        workcharts(workbook, workchart, worksheet.name, "连接时间(ms)", "E", "%s36" % column)
+        workcharts(workbook, workchart, worksheet.name, "下载时间(ms)", "F", "%s53" % column)
+        currentcol += 9
     createextratable(workbook, titlestyle, coltitlestyle)
 
     workbook.close()
     logging.info("%s写入数据完成" % filename)
-
-
-logging.info("监测网站可用次数为%d" % int(checkavailable()))
-works()
-logging.info("监测网站剩余可用次数为%d" % int(checkavailable()))

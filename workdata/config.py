@@ -21,6 +21,7 @@ sites = {
     "sg.platon.network": "Platon(东南亚)",
     "www.ont.io": "ONT本体(东南亚)",
     "www.ethereum.org": "Ethereum以太坊",
+    "hk.platon.network":"Platon(香港)",
 }
 
 countryCode = {

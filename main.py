@@ -15,7 +15,7 @@ def main():
     logging.info("当前获取到的城市列表: %s" % city)
     result = int(checkavailable())
     logging.info("监测网站可用次数为%d" % result)
-    if result / 10 >= 4:
+    if result / 10 >= 5:
         works()
         logging.info("监测网站剩余可用次数为%d" % int(checkavailable()))
     else:

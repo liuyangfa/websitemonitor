@@ -1,20 +1,15 @@
 # -*- coding:utf-8-*-
 import logging
-import sys
 from datetime import datetime
 
 import xlsxwriter
 from xlsxwriter.utility import xl_col_to_name
-from config import *
+
 from collect.collector import getdatas
+from config import *
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
-
-# codes = ("hk", "d2", "se", "uk", "it", "ch", "n4", "r1", "gr", "mt")
-
-
-
 
 
 def createextratable(workbook, titlstyle, coltitlestyle):
@@ -45,19 +40,21 @@ def createextratable(workbook, titlstyle, coltitlestyle):
     sitestyle = workbook.add_format({"valign": "vcenter", "border": 1, "font_size": 12})
     commonstyle = workbook.add_format({"font_size": 12, "border": 1})
 
-    worksheet.merge_range(4, 1, 19, 1, "%s" % dates, mergeraw)
+    worksheet.merge_range(4, 1, 23, 1, "%s" % dates, mergeraw)
     worksheet.merge_range(4, 2, 7, 2, "PlatON(京东)", mergeraw)
     worksheet.merge_range(8, 2, 11, 2, "PlatON(东南亚)", mergeraw)
     worksheet.merge_range(12, 2, 15, 2, "ONT本体(东南亚)", mergeraw)
     worksheet.merge_range(16, 2, 19, 2, "Ethereum(以太坊)", mergeraw)
+    worksheet.merge_range(20, 2, 23, 2, "PlatON(香港)", mergeraw)
     worksheet.merge_range(4, 3, 7, 3, "https://www.platon.network", sitestyle)
     worksheet.merge_range(8, 3, 11, 3, "https://sg.platon.network", sitestyle)
     worksheet.merge_range(12, 3, 15, 3, "https://www.ont.io", sitestyle)
     worksheet.merge_range(16, 3, 19, 3, "https://www.ethereum.org", sitestyle)
+    worksheet.merge_range(20, 3, 23, 3, "https://hk.platon.network", sitestyle)
 
-    for i in range(4, 7):
+    for i in range(4, 7):  # 从第五列开始写入数据直到第七列
         raw = 4
-        for j in range(0, 4):
+        for j in range(0, 5):  # 给五个需要访问的网站添加数据项
             if i == 4:
                 worksheet.write_string(raw, 4, "PC网页", commonstyle)
                 worksheet.write_string(raw + 1, 4, "手机(移动)", commonstyle)
@@ -153,6 +150,9 @@ def works():
                 "https://api.asm.ca.com/1.6/cp_check?checkloc=%s&type=https&host=%s&path=&port=443&callback=update_" % (
                     code, site), code)
             worksheet.write_string(row, 1, "%s-%s" % (countryCode.get(country), cityCode.get(city)), areaStyle)
+            # print("*" * 80)
+            # print "%s - %s"%(countryCode.get(country), cityCode.get(city))
+            # print("*" * 80)
             worksheet.write_number(row, 3, int(rtime), dataStyle)
             worksheet.write_number(row, 4, int(ctime), dataStyle)
             worksheet.write_number(row, 5, int(dtime), dataStyle)

@@ -17,10 +17,10 @@ codes = {
     "mt": "加拿大 - 蒙特利尔",
 }
 sites = {
-    # "www.platon.network": "Platon(京东)",
+    "www.platon.network": "Platon(京东)",
     "sg.platon.network": "Platon(东南亚)",
     "www.ont.io": "ONT本体(东南亚)",
-    # "www.ethereum.org": "Ethereum以太坊",
+    "www.ethereum.org": "Ethereum以太坊",
 }
 
 countryCode = {

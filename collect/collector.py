@@ -34,7 +34,7 @@ def getdatas(url, code):
         logging.error(e.message)
         country = getcountry(code)
         city = getcity(code)
-        print "%s\t%s %s\t%s\t%s\t%s" % (resp.status_code, country, city, 0, 0, 0)
+        print "%s\t%s %s\t%s\t%s\t%s" % (94, country, city, 0, 0, 0)
         return (country, city, "0", "0", "0")
         # return ("NA", "NA", "0", "0", "0")
     if resp.status_code != 200:
